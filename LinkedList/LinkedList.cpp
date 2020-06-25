@@ -94,7 +94,7 @@ LinkedList::~LinkedList()
 	forceNodeDelete(_head);
 }
 
-ValueType& LinkedList::operator[](const size_t pos) const
+const ValueType& LinkedList::operator[](const size_t pos) const
 {
 	return getNode(pos)->value;
 }

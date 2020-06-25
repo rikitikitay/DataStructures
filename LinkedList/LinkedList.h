@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 
 // потом поменяем на шаблоны
 using ValueType = double;
@@ -70,4 +71,3 @@ private:
 
 	void forceNodeDelete(Node* node);
 };
-
