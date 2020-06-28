@@ -1,5 +1,4 @@
 #include "LinkedList.h"
-
 #include <cassert>
 
 LinkedList::Node::Node(const ValueType& value, Node* next)
@@ -15,8 +14,7 @@ LinkedList::Node::~Node()
 
 void LinkedList::Node::insertNext(const ValueType& value)
 {
-	Node* newNode = new Node(value, this->next);
-	this->next = newNode;
+	this->next = new Node(value, this->next);
 }
 
 void LinkedList::Node::removeNext()
@@ -99,15 +97,16 @@ const ValueType& LinkedList::operator[](const size_t pos) const
 	return getNode(pos)->value;
 }
 
-LinkedList::Node* LinkedList::getNode(const size_t pos) const
+ValueType& LinkedList::operator[](const size_t pos) 
 {
-	if (pos < 0) {
-		assert(pos < 0);
-	}
-	else if (pos >= this->_size) {
-		assert(pos >= this->_size);
-	}
+	return getNode(pos)->value;
+}
 
+LinkedList::Node* LinkedList::getNode(const size_t pos) const
+{	
+	assert(pos >= 0);
+	assert(pos < this->_size);
+	
 	Node* bufNode = this->_head;
 	for (int i = 0; i < pos; ++i) {
 		bufNode = bufNode->next;
@@ -118,12 +117,8 @@ LinkedList::Node* LinkedList::getNode(const size_t pos) const
 
 void LinkedList::insert(const size_t pos, const ValueType& value)
 {
-	if (pos < 0) {
-		assert(pos < 0);
-	}
-	else if (pos > this->_size) {
-		assert(pos > this->_size);
-	}
+	assert(pos >= 0);
+	assert(pos <= this->_size);
 
 	if (pos == 0) {
 		pushFront(value);

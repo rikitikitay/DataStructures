@@ -1,4 +1,7 @@
 #pragma once
+#ifndef __LINKEDLIST_H__
+#define __LINKEDLIST_H__
+
 #include <cstddef>
 
 // потом поменяем на шаблоны
@@ -71,3 +74,4 @@ private:
 
 	void forceNodeDelete(Node* node);
 };
+#endif
