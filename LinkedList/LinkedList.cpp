@@ -1,6 +1,5 @@
 #include "LinkedList.h"
 #include <cassert>
-
 LinkedList::Node::Node(const ValueType& value, Node* next)
 {
 	this->value = value;
@@ -28,7 +27,6 @@ void LinkedList::Node::removeNext()
 LinkedList::LinkedList()
 	: _head(nullptr), _size(0)
 {
-	
 }
 
 LinkedList::LinkedList(const LinkedList& copyList)
@@ -39,16 +37,18 @@ LinkedList::LinkedList(const LinkedList& copyList)
 		return;
 	}
 
-	this->_head = new Node(copyList._head->value);
+	this->_head = new Node(copyList._head->value); 
 
-	Node* currentNode = this->_head;
-	Node* currentCopyNode = copyList._head;
+	Node* currentNode = this->_head; 
 
-	while (currentCopyNode->next) {
-		currentNode->next = new Node(currentCopyNode->value);
+	Node* currentCopyNode = copyList._head; 
+
+	while (currentCopyNode->next) { 
+		currentNode->next = new Node(currentCopyNode->next->value);
 		currentCopyNode = currentCopyNode->next;
 		currentNode = currentNode->next;
-	}
+	};
+
 }
 
 LinkedList& LinkedList::operator=(const LinkedList& copyList)
@@ -56,10 +56,25 @@ LinkedList& LinkedList::operator=(const LinkedList& copyList)
 	if (this == &copyList) {
 		return *this;
 	}
-	LinkedList bufList(copyList);
-	this->_size = bufList._size;
-	this->_head = bufList._head;
 
+	forceNodeDelete(this->_head);
+
+	this->_size = copyList._size;
+	if (this->_size == 0) {
+		this->_head = nullptr;
+		return *this;
+	}
+
+	this->_head = new Node(copyList._head->value); 
+
+	Node* currentNode = this->_head; 
+	Node* currentCopyNode = copyList._head; 
+	
+	while (currentCopyNode->next) { 
+		currentNode->next = new Node(currentCopyNode->next->value);
+		currentCopyNode = currentCopyNode->next;
+		currentNode = currentNode->next;
+	};
 	return *this;
 }
 
@@ -104,7 +119,7 @@ ValueType& LinkedList::operator[](const size_t pos)
 
 LinkedList::Node* LinkedList::getNode(const size_t pos) const
 {	
-	assert(pos >= 0);
+	// assert(pos >= 0);
 	assert(pos < this->_size);
 	
 	Node* bufNode = this->_head;
@@ -116,8 +131,9 @@ LinkedList::Node* LinkedList::getNode(const size_t pos) const
 }
 
 void LinkedList::insert(const size_t pos, const ValueType& value)
-{
-	assert(pos >= 0);
+{	
+	// assert(pos >= 0); // pos всегда больше 0 из того что size_t, 
+	// не знаю, что с этим делать
 	assert(pos <= this->_size);
 
 	if (pos == 0) {
@@ -199,4 +215,5 @@ void LinkedList::forceNodeDelete(Node* node)
 	Node* nextDeleteNode = node->next;
 	delete node;
 	forceNodeDelete(nextDeleteNode);
+	
 }
