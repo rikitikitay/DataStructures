@@ -1,5 +1,8 @@
 #include "LinkedList.h"
 #include <cassert>
+#include <iostream>
+#include <stdexcept>
+using namespace std;
 LinkedList::Node::Node(const ValueType& value, Node* next)
 {
 	this->value = value;
@@ -13,15 +16,31 @@ LinkedList::Node::~Node()
 
 void LinkedList::Node::insertNext(const ValueType& value)
 {
+	if (!this) 
+	{
+		throw invalid_argument("this node is nullptr !!! can't insert next node");
+	}
 	this->next = new Node(value, this->next);
 }
 
 void LinkedList::Node::removeNext()
 {
+	if (!this) 
+	{
+		cout << "exception" << endl;
+		throw invalid_argument("this node is nullptr !!! can't remove next node");
+	}
 	Node* removeNode = this->next;
-	Node* newNext = removeNode->next;
-	delete removeNode;
-	this->next = newNext;
+	if (removeNode) 
+	{
+		Node* newNext = removeNode->next;
+		delete removeNode;
+		this->next = newNext;
+	} else 
+	{
+		cout << "exception" << endl;
+		throw invalid_argument("this node is last !!! cant't remove next node"); 
+	}; 
 }
 
 LinkedList::LinkedList()
@@ -152,6 +171,7 @@ void LinkedList::insert(const size_t pos, const ValueType& value)
 void LinkedList::insertAfterNode(Node* node, const ValueType& value)
 {
 	node->insertNext(value);
+	++_size;
 }
 
 void LinkedList::pushBack(const ValueType& value)
@@ -169,26 +189,80 @@ void LinkedList::pushFront(const ValueType& value)
 	++_size;
 }
 
-void LinkedList::remove(const size_t pos)
+void LinkedList::removeFront() 
 {
+	Node* newHead = this->_head->next;
+	delete this->_head;
+	this->_head = newHead;
+	--_size;
 }
+
+void LinkedList::remove(const size_t pos)
+{	
+	assert(this->_size > 0);
+	assert(pos < this->_size);
+	 if (pos == 0) 
+	{
+		this->removeFront();
+		return;
+	} else 
+	{
+		Node* bufNode = this->_head;
+		for (size_t i = 0; i < pos - 1; ++i) 
+		{
+			bufNode = bufNode->next;	
+		}
+		bufNode->removeNext();
+		--_size;
+	}
+}
+
+void LinkedList::removeBack() 
+{
+	this->remove(_size - 1); // вероятно, можно лучше, но пока так
+}
+
 
 void LinkedList::removeNextNode(Node* node)
 {
+	node->removeNext(); //а если нулевой указатель?
+	--_size;
 }
-
 long long int LinkedList::findIndex(const ValueType& value) const
 {
-	return 0;
+	long long int index = -1;
+	long long int count = 0;
+	Node* bufNode = this->_head;	
+	while (bufNode) 
+	{	
+		if (bufNode->value == value) 
+		{
+			index = count;
+			break;
+		}
+		bufNode = bufNode->next;
+		count += 1;	
+	}
+	return index;
 }
 
 LinkedList::Node* LinkedList::findNode(const ValueType& value) const
 {
-	return nullptr;
+	Node* bufNode = this->_head;	
+	while (bufNode) 
+	{	
+		if (bufNode->value == value) 
+		{
+			break;
+		}
+		bufNode = bufNode->next;
+	}
+	return bufNode;
 }
 
 void LinkedList::reverse()
 {
+	//this->pushFront(
 }
 
 LinkedList LinkedList::reverse() const
