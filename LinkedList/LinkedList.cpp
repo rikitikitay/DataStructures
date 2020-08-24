@@ -104,6 +104,8 @@ LinkedList::LinkedList(LinkedList&& moveList) noexcept
 
 	moveList._size = 0;
 	moveList._head = nullptr;
+
+	std::cout << "srabotal kostruktor peremesheniya" << std::endl;
 }
 
 LinkedList& LinkedList::operator=(LinkedList&& moveList) noexcept
@@ -117,7 +119,7 @@ LinkedList& LinkedList::operator=(LinkedList&& moveList) noexcept
 
 	moveList._size = 0;
 	moveList._head = nullptr;
-
+	std::cout << "srabotal operator prisvaivaniya peremesheniyem" << std::endl;
 	return *this;
 }
 
@@ -262,17 +264,45 @@ LinkedList::Node* LinkedList::findNode(const ValueType& value) const
 
 void LinkedList::reverse()
 {
-	//this->pushFront(
+	Node* bufNode = this->_head;
+	if (bufNode) 	
+		while (bufNode->next)
+		{
+			pushFront(bufNode->next->value);
+			this->removeNextNode(bufNode);
+		}	
 }
 
-LinkedList LinkedList::reverse() const
+LinkedList LinkedList::reverse() const // потестить ещё
 {
-	return LinkedList();
+	LinkedList bufList;
+	Node* bufNode = this->_head;
+	if (bufNode) 
+	{	
+		bufList.pushFront(bufNode->value);
+		while (bufNode->next) 
+		{
+			bufList.pushFront(bufNode->next->value);
+			bufNode = bufNode->next;
+		}
+	}
+	return bufList;
 }
 
 LinkedList LinkedList::getReverseList() const
 {
-	return LinkedList();
+	LinkedList bufList;
+	Node* bufNode = this->_head;
+	if (bufNode) 
+	{	
+		bufList.pushFront(bufNode->value);
+		while (bufNode->next) 
+		{
+			bufList.pushFront(bufNode->next->value);
+			bufNode = bufNode->next;
+		}
+	}
+	return bufList;
 }
 
 size_t LinkedList::size() const
