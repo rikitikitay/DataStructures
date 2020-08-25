@@ -3,10 +3,7 @@
 #define __LINKEDLIST_H__
 
 #include <cstddef>
-
-// потом поменяем на шаблоны
 using ValueType = double;
-
 class LinkedList
 {
 	// класс узла списка
